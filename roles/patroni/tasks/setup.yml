@@ -1,0 +1,14 @@
+---
+- name: Install patroni
+  ansible.builtin.apt:
+    name: patroni
+    state: present
+    update_cache: yes
+
+- name: Copy patroni configuration
+  ansible.builtin.template:
+    src: config.j2
+    dest: /etc/patroni/config.yml
+    mode: '0777'
+    
+  notify: Restart patroni

@@ -1,0 +1,8 @@
+---
+# handlers file for prometheus
+- name: Перезапуск firewalld
+  command: firewall-cmd --reload
+
+- name: Перезапуск systemd
+  systemd:
+    daemon_reload: yes

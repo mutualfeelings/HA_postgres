@@ -1,0 +1,40 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for etcd
+- name: Install etcd
+  ansible.builtin.apt:
+    name: etcd
+    state: present
+
+- name: Stop etcd
+  ansible.builtin.systemd:
+    name: etcd
+    state: started
+    enabled: yes
+
+- name: Copy etcd configuration file
+  template:
+      src: etcd1.j2
+      dest: /etc/default/etcd
+      mode: 0555
+  when: inventory_hostname == 'etcd_1'
+  notify:
+    - restart etcd
+
+- name: Copy etcd configuration file
+  template:
+      src: etcd2.j2
+      dest: /etc/default/etcd
+      mode: 0555
+  when: inventory_hostname == 'etcd_2'
+  notify:
+    - restart etcd
+
+- name: Copy etcd configuration file
+  template:
+      src: etcd3.j2
+      dest: /etc/default/etcd
+      mode: 0555
+  when: inventory_hostname == 'etcd_3'
+  notify:
+    - restart etcd

@@ -1,0 +1,29 @@
+global_defs {
+}
+
+vrrp_script check_haproxy {
+    script "/usr/bin/killall -0 haproxy" # widely used idiom
+    interval 2 # check every 2 seconds
+    weight 2 # add 2 points of prio if OK
+}
+vrrp_instance VI_1 {
+    interface {{ interface }}
+    state {{ ka_state }}
+    priority {% if inventory_hostname == 'keepalive_1' %} 120 {% else %} 100 {% endif %}
+
+    virtual_router_id {{ router_id }}
+    virtual_ipaddress {
+        192.168.20.180/24
+    }
+    unicast_src_ip {{ ansible_default_ipv4.address }} # This node
+        unicast_peer {
+        {% if ka_state == 'MASTER' %}
+        {{ replica_ip }}   # IP адрес реплики для мастера
+        {% elif ka_state == 'BACKUP' %}
+        {{ master_ip }}    # IP адрес мастера для реплики
+        {% endif %}
+    }
+    track_script {
+        check_haproxy
+    }
+}

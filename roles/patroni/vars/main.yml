@@ -1,0 +1,13 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for patroni
+data_dir: /var/lib/postgresql/14/main
+bin_dir: /usr/lib/postgresql/14/bin
+
+pg_port: 5432
+
+pg_password: password
+pg_user: postgres
+
+replic_password: password
+replic_user: replicator

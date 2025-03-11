@@ -1,0 +1,29 @@
+---
+
+- name: Install etcd
+  hosts: etcd
+  become: yes
+
+  roles:
+    - role: etcd
+
+- name: Install postgres
+  hosts: patroni
+  become: yes
+
+  roles:
+    - role: patroni
+    
+- name: Install HAproxy
+  hosts: HAproxy
+  become: yes
+
+  roles:
+    - role: HAProxy
+
+- name: Install keepalived
+  hosts: KeepAlive
+  become: yes
+
+  roles:
+    - role: keepalived

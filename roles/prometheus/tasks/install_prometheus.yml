@@ -1,0 +1,57 @@
+﻿---
+- name: Создание пользователя prometheus
+  user:
+    name: prometheus
+    create_home: no
+    shell: /bin/false
+
+- name: Создание папок для prometheus
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+  loop:
+    - '/tmp/prometheus'
+    - '/etc/prometheus'
+    - '/var/lib/prometheus'
+
+- name: Скачивание и разархивирование Prometheus
+  unarchive:
+    src: https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-arm64.tar.gz
+    dest: /tmp/prometheus
+    creates: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-arm64
+    remote_src: yes
+
+- name: Копирование исполняемых файлов в папку Prometheus
+  copy:
+    src: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-arm64/{{ item }}
+    dest: /usr/local/bin/
+    remote_src: yes
+    mode: preserve
+    owner: prometheus
+    group: prometheus
+  loop: [ 'prometheus', 'promtool' ]
+
+- name: Копирование конфигурационных файлов в папку Prometheus
+  copy:
+    src: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-arm64/{{ item }}
+    dest: /etc/prometheus/
+    remote_src: yes
+    mode: preserve
+    owner: prometheus
+    group: prometheus
+  loop: [ 'console_libraries', 'consoles', 'prometheus.yml' ]
+
+- name: Создание файлов для демона Prometheus
+  template:
+    src=templates/prometheus.service
+    dest=/etc/systemd/system/
+  notify:
+    - systemd reload
+
+- name: Запуск Prometheus
+  systemd:
+    name: prometheus
+    state: started
+    enabled: yes
