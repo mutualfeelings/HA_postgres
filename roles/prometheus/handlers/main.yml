@@ -3,6 +3,6 @@
 - name: Перезапуск firewalld
   command: firewall-cmd --reload
 
-- name: Перезапуск systemd
+- name: systemd reload
   systemd:
     daemon_reload: yes

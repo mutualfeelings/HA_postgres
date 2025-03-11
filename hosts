@@ -19,7 +19,10 @@ haproxy_2 ansible_host=51.250.79.32
 
 [KeepAlive]
 keepalive_1 ansible_host=51.250.79.61 ka_state=MASTER 
-keepalive_2 ansible_host=51.250.79.62 ka_state=BACKUP 
+keepalive_2 ansible_host=51.250.79.62 ka_state=BACKUP
+
+[monitoring]
+node_1 ansible_host=51.250.79.20
 
 [patroni:vars]
 patroni_node_1=192.168.20.11
@@ -45,3 +48,4 @@ etcd
 pgbouncer
 HAproxy
 KeepAlive
+monitoring

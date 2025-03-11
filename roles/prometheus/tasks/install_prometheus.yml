@@ -18,14 +18,14 @@
 
 - name: Скачивание и разархивирование Prometheus
   unarchive:
-    src: https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-arm64.tar.gz
+    src: https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz
     dest: /tmp/prometheus
-    creates: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-arm64
+    creates: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-amd64
     remote_src: yes
 
 - name: Копирование исполняемых файлов в папку Prometheus
   copy:
-    src: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-arm64/{{ item }}
+    src: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}
     dest: /usr/local/bin/
     remote_src: yes
     mode: preserve
@@ -35,7 +35,7 @@
 
 - name: Копирование конфигурационных файлов в папку Prometheus
   copy:
-    src: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-arm64/{{ item }}
+    src: /tmp/prometheus/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}
     dest: /etc/prometheus/
     remote_src: yes
     mode: preserve

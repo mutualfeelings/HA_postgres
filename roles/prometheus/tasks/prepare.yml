@@ -16,7 +16,8 @@
   
     - name: Остановка SELinux
       shell: setenforce 0
-      ignore_errors: yes
+      ignore_errors: true
+  
   when:
     ansible_os_family == "RedHat"
 
