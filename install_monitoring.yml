@@ -5,3 +5,10 @@
 
   roles: 
     - prometheus
+
+- name: Install node exporter
+  hosts: all
+  become: yes
+
+  roles:
+    - node_exporter

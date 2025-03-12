@@ -41,7 +41,13 @@
     mode: preserve
     owner: prometheus
     group: prometheus
-  loop: [ 'console_libraries', 'consoles', 'prometheus.yml' ]
+  loop: [ 'console_libraries', 'consoles' ]
+
+- name: Copy prometheus.yml
+  ansible.builtin.template:
+    src: prometheus.j2
+    dest: /etc/prometheus/prometheus.yml
+    mode: 0644
 
 - name: Создание файлов для демона Prometheus
   template:
