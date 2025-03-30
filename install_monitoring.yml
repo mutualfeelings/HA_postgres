@@ -1,10 +1,10 @@
 ---
-# - name: Install Prometheus
-#   hosts: monitoring
-#   become: yes
+- name: Install Prometheus
+  hosts: monitoring
+  become: yes
 
-#   roles: 
-#     - prometheus
+  roles: 
+    - prometheus
 
 # - name: Install exporter
 #   hosts: all
