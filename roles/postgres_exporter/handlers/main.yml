@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for postgres_exporter
+- name: restart postgres_exporter
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: postgres_exporter
+    state: restarted
+    enabled: true

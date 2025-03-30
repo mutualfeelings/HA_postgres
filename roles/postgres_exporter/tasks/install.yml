@@ -1,0 +1,106 @@
+---
+
+- name: Verify current deployed version
+  block:
+    - name: Check if postgres_exporter binary is present
+      ansible.builtin.stat:
+        path: "{{ postgres_exporter_binary_path }}/postgres_exporter"
+      register: __already_deployed
+
+    - name: Obtain current deployed postgres_exporter version
+      ansible.builtin.command:
+        cmd: "{{ postgres_exporter_binary_path }}/postgres_exporter --version"
+      changed_when: false
+      register: __current_deployed_version
+      when: __already_deployed.stat.exists | bool
+
+- name: Create postgres_exporter system group
+  ansible.builtin.group:
+    name: "{{ postgres_exporter_group }}"
+    system: true
+    state: present
+
+- name: Create the postgres_exporter system user
+  user:
+    name: "{{ postgres_exporter_user }}"
+    group: "{{ postgres_exporter_group }}"
+    shell: "/sbin/nologin"
+    system: true
+    create_home: false
+    state: present
+
+- name: Create textfile dir
+  ansible.builtin.file:
+    path: "{{ postgres_exporter_textfile_path }}"
+    state: directory
+    mode: "0755"
+  when: postgres_exporter_textfile_path is defined
+
+- name: Download block
+  block:
+    - name: Create tmp dir 
+      tempfile:
+        path: "/tmp"
+        suffix: postgres_exporter
+        state: directory
+      register: __tempfolder
+
+    - name: Download postgres_exporter
+      get_url:
+        url: "{{ postgres_exporter_download_url }}"
+        dest: "{{ __tempfolder.path }}"
+        mode: "0750"
+        owner: "{{ postgres_exporter_user }}"
+        group: "{{ postgres_exporter_group }}"
+
+    - name: Unatchive postgres_exporter binary to /tmp
+      ansible.builtin.unarchive:
+        remote_src: true
+        src: "{{ __tempfolder.path }}/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}.tar.gz"
+        dest: "{{ __tempfolder.path }}"
+        creates: "{{ __tempfolder.path }}/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}/postgres_exporter"
+        owner: "{{ postgres_exporter_user}}"
+        group: "{{ postgres_exporter_group}}"
+
+    - name: Copy binary postgres_exporter to "{{ postgres_exporter_binary_path }}"
+      ansible.builtin.copy:
+        src: "{{ __tempfolder.path }}/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}/postgres_exporter"
+        dest: "{{ postgres_exporter_binary_path}}"
+        mode: "0750"
+        owner: "{{ postgres_exporter_user }}"
+        group: "{{ postgres_exporter_group }}"
+        remote_src: true
+      notify: restart restart postgres_exporter
+
+  always:
+    - name: Remove temp dir
+      ansible.builtin.file:
+        path: "{{ __tempfolder.path }}"
+        state: absent
+  when: __current_deployed_version.stdout is not defined or postgres_exporter_version not in __current_deployed_version.stdout
+
+- name: Template postgres_exporter systemd unit file
+  ansible.builtin.template:
+    src: postgres_exporter.service.j2
+    dest: "/etc/systemd/system/postgres_exporter.service"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  notify: restart restart postgres_exporter
+
+- name: Flush handlers after deployment
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure that postgres_exporter is started
+  ansible.builtin.systemd:
+    name: postgres_exporter
+    state: started
+
+- name: Verify that postgres_exporter URL is accessible
+  ansible.builtin.uri:
+    url: "http://{{ postgres_exporter_web_listen_address }}:{{ postgres_exporter_listen_port }}"
+    method: GET
+  register: postgres_exporter_verify_url_status_code
+  retries: 5
+  delay: 5
+  until: postgres_exporter_verify_url_status_code.status == 200

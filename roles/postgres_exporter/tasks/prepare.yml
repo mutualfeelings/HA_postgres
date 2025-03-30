@@ -1,0 +1,15 @@
+---
+- name: Create user
+  postgresql_user:
+    login_user: "{{ postgres_user }}"
+    login_password: "{{ postgres_password }}"
+    db: postgres
+    name: "{{ postgres_exporter_user }}"
+    password: "{{ postgres_exporter_password }}"
+
+- name: Grant select on all tables in schema public to postgresql_exporter
+  postgresql_query:
+    login_user: "{{ postgres_user }}"
+    login_password: "{{ postgres_password }}"
+    db: postgres
+    query: "GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{ postgres_exporter_user }}"

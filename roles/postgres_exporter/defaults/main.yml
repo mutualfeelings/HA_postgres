@@ -1,0 +1,23 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for postgres_exporter
+postgres_exporter_version: "0.17.1"
+postgres_exporter_download_url: "https://github.com/prometheus-community/postgres_exporter/releases/{{ postgres_exporter_version }}/download/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}.tar.gz"
+postgres_exporter_binary_path: "/usr/local/bin"
+postgres_exporter_user: "postgres_exporter"
+postgres_exporter_password: "postgres"
+postgres_exporter_group: "postgres_exporter"
+postgres_exporter_web_listen_address: "0.0.0.0"
+postgres_exporter_listen_port: 9187
+postgres_exporter_arch: "amd64"
+postgres_exporter_expose_port: true
+
+postgres_user: "postgresql_user"
+postgres_password: "password"
+
+# group_vars or host_vars
+# postgres_exporter_textfile_path: "/var/lib/postgres_exporter"
+# npostgres_exporter_runtime_flags:
+#   - "--collector.textfile.directory {{ postgres_exporter_textfile_path }}"
+#   - "--collector.systemd"
+#   - "--collector.network_route"
