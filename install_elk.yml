@@ -1,0 +1,12 @@
+---
+- name: Install elk
+  hosts: monitoring
+  become: yes
+
+  roles:
+    - elasticsearch
+    - kibana
+
+- name: Install filebeat
+  roles:
+    - filebeat

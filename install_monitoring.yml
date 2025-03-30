@@ -6,12 +6,12 @@
   roles: 
     - prometheus
 
-# - name: Install exporter
-#   hosts: all
-#   become: yes
+- name: Install exporter
+  hosts: all
+  become: yes
 
-#   roles:
-#     - node_exporter
+  roles:
+    - node_exporter
 
 - name: Install postgres_exporter
   hosts: patroni
@@ -20,9 +20,9 @@
   roles:
     - postgres_exporter
 
-# - name: Install grafana
-#   hosts: monitoring
-#   become: yes
+- name: Install grafana
+  hosts: monitoring
+  become: yes
   
-#   roles:
-#     - grafana
+  roles:
+    - grafana
