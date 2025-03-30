@@ -5,5 +5,5 @@
 - name: Settings postgres
   ansible.builtin.include_tasks: tasks/prepare.yml
 
-# - name: Install postgres_exporter
-#   ansible.builtin.include_tasks: tasks/install.yml
+- name: Install postgres_exporter
+  ansible.builtin.include_tasks: tasks/install.yml

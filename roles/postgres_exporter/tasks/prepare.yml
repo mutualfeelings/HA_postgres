@@ -13,3 +13,4 @@
     login_password: "{{ postgres_password }}"
     db: postgres
     query: "GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{ postgres_exporter_user }}"
+  ignore_errors: true

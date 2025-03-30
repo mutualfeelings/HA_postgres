@@ -66,11 +66,11 @@
       ansible.builtin.copy:
         src: "{{ __tempfolder.path }}/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}/postgres_exporter"
         dest: "{{ postgres_exporter_binary_path}}"
-        mode: "0750"
+        mode: "0755"
         owner: "{{ postgres_exporter_user }}"
         group: "{{ postgres_exporter_group }}"
         remote_src: true
-      notify: restart restart postgres_exporter
+      notify: restart postgres_exporter
 
   always:
     - name: Remove temp dir
@@ -86,7 +86,7 @@
     mode: "0644"
     owner: "root"
     group: "root"
-  notify: restart restart postgres_exporter
+  notify: restart postgres_exporter
 
 - name: Flush handlers after deployment
   ansible.builtin.meta: flush_handlers

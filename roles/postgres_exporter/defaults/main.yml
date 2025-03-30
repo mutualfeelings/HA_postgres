@@ -2,7 +2,7 @@
 ---
 # defaults file for postgres_exporter
 postgres_exporter_version: "0.17.1"
-postgres_exporter_download_url: "https://github.com/prometheus-community/postgres_exporter/releases/{{ postgres_exporter_version }}/download/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}.tar.gz"
+postgres_exporter_download_url: "https://github.com/prometheus-community/postgres_exporter/releases/download/v{{ postgres_exporter_version }}/postgres_exporter-{{ postgres_exporter_version }}.linux-{{ postgres_exporter_arch }}.tar.gz"
 postgres_exporter_binary_path: "/usr/local/bin"
 postgres_exporter_user: "postgres_exporter"
 postgres_exporter_password: "postgres"
