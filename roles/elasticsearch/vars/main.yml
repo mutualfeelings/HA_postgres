@@ -1,3 +1,4 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # vars file for elasticsearch
+elasticsearch_java_home: "/usr/share/elasticsearch/jdk"

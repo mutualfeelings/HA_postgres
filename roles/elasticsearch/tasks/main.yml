@@ -1,3 +1,10 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# tasks file for elasticsearch
+- name: Prepare Install
+  ansible.builtin.include_tasks: tasks/prepare.yml
+
+- name: Install java
+  ansible.builtin.include_tasks: tasks/install_java.yml
+
+- name: Install elasticsearch
+  ansible.builtin.include_tasks: tasks/install_es.yml

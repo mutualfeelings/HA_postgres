@@ -1,0 +1,13 @@
+cluster.name: {{ elasticsearch_cluster_name }}
+cluster.initial_master_nodes: [\"{{ elasticsearch_node_name }}\"]
+node.name: {{ elasticsearch_node_name }}
+network.host: {{ elasticsearch_network_host }}
+http.port: {{ elasticsearch_http_port }}
+path.data: {{ elasticsearch_data }}
+path.logs: {{ elasticsearch_log }}
+
+xpack.security.enabled: true
+
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.certificate: "/etc/elasticsearch/certs/instance/instance.crt"
+xpack.security.transport.ssl.key: "/etc/elasticsearch/certs/instance/instance.key"

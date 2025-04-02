@@ -1,0 +1,18 @@
+---
+- name: Create folder for certificates
+  ansible.builtin.file:
+    path: /etc/elasticsearch/certs
+    state: directory
+    mode: 0760
+    owner: "{{ elasticsearch_user_group }}"
+    group: "{{ elasticsearch_user_group }}"
+
+- name: Generate CA certificate
+  ansible.builtin.command:
+    cmd: sudo /usr/share/elasticsearch/bin/elasticsearch-certutil ca --silent -out /etc/elasticsearch/certs/elastic-stack-ca.p12
+    creates: /etc/elasticsearch/certs/elastic-stack-ca.p12
+
+- name: Generate node certificates
+  ansible.builtin.command:
+    cmd: sudo /usr/share/elasticsearch/bin/elasticsearch-certutil cert --silent --pem --ca /etc/elasticsearch/certs/elastic-stack-ca.p12 -out /etc/elasticsearch/certs/transport.zip
+    creates: /etc/elasticsearch/certs/transport.zip

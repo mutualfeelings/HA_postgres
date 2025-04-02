@@ -1,0 +1,39 @@
+---
+# tasks file for elasticsearch
+# - name: Download and install the Debian package manually
+#   ansible.builtin.get_url:
+#     url: "{{ elasticsearch_deb_url }}"
+#     dest: "/tmp/elasticsearch-{{ elasticsearch_version }}.deb"
+#     mode: "0644"
+
+- name: Install Elasticsearch package
+  ansible.builtin.apt:
+    deb: "/tmp/elasticsearch-{{ elasticsearch_version }}-amd64.deb"
+    state: present
+
+- name: Create certs
+  include_tasks: tasks/generate_certs.yml
+
+- name: Configure Elasticsearch
+  ansible.builtin.template:
+    src: elasticsearch.j2
+    dest: "/etc/elasticsearch/elasticsearch.yml"
+    owner: elasticsearch
+    group: elasticsearch
+    mode: "0644"
+  notify:
+    - Restart Elasticsearch
+
+- name: Configure heap size
+  ansible.builtin.lineinfile:
+    path: "/etc/elasticsearch/jvm.options"
+    regexp: "^#?-Xms"
+    line: "-Xms{{ elasticsearch_heap_size }}"
+  notify:
+    - Restart Elasticsearch
+
+- name: Start and enable Elasticsearch service
+  ansible.builtin.systemd:
+    name: elasticsearch
+    state: started
+    enabled: true

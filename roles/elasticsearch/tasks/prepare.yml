@@ -1,0 +1,37 @@
+﻿---
+- name: Настройки безопасности для RedHat
+  block:
+    - name: Allow Ports
+      firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop: [ '9200/tcp', '9300/tcp' ]
+      notify:
+        - firewalld systemd restart
+  
+    - name: Отключение SELinux
+      selinux:
+        state: disabled
+  
+    - name: Остановка SELinux
+      shell: setenforce 0
+      ignore_errors: true
+  
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Настройка безопасности для Debian
+  block:
+    - name: Открытие TCP портов
+      iptables:
+        chain: INPUT
+        rule_num: '1'
+        action: insert
+        protocol: tcp
+        jump: ACCEPT
+        destination_port: "{{ item }}"
+      loop: [ '9200', '9300' ]
+      
+  when:
+    ansible_os_family == "Debian"

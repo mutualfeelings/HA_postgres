@@ -1,3 +1,37 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for elasticsearch
+elasticsearch_version: "8.17.4"
+elasticsearch_heap_size: "1g"
+elasticsearch_cluster_name: "elasticsearch-cluster"
+elasticsearch_node_name: "{{ ansible_hostname }}"
+elasticsearch_network_host: "0.0.0.0"
+elasticsearch_http_port: 9200
+elasticsearch_deb_url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-amd64.deb"
+
+
+
+# Security
+security_mode: false
+elasticsearch_path_home: "/usr/share/elasticsearch"
+elasticsearch_path_etc: "/etc/elasticsearch"
+elasticsearch_tls_cert_ca_pass: ""
+elasticsearch_tls_cert_pass: ""
+elasticsearch_tls_cert_dir: "certs"
+elasticsearch_user_group: "elasticsearch"
+elasticsearch_data: "/var/lib/elasticsearch"
+elasticsearch_log: "/var/log/elasticsearch"
+
+logstash_path_etc: "/etc/logstash/conf.d"
+logstash_tls_cert_dir: "certs"
+logstash_user_group: "logstash"
+
+users:
+  elastic:
+    password: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      39303662326566336336313838626538653665393330316536666461633766643363316132316532
+      3436643034663630363632636237373435393139313033330a333661326233616339313766353563
+      30313630356238666138353132313433353164356137613636343634353833653263356563346138
+      6639643530336335340a613736353563366335333863373436366338616462323266363931316339
+      3862
