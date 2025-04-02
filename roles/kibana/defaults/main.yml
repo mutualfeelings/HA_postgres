@@ -1,3 +1,9 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for kibana
+kibana_version: 8.17.4
+kibana_deb_url: "https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana_version }}-amd64.deb"
+kibana_server_host: "0.0.0.0"
+
+kibana_username: "kibana"
+kibana_password: "324012"
