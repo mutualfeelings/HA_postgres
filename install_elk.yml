@@ -6,6 +6,7 @@
   roles:
     - elasticsearch
     - kibana
+    - logstash
 
 # - name: Install filebeat
 #   hosts: patroni
