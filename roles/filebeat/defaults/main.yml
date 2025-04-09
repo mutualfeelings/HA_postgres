@@ -1,6 +1,9 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for filebeat
+filebeat_version: 8.17.4
+filebeat_deb_url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ logstash_version }}-amd64.deb"
+
 logstash_host: "{{ hostvars['elk'].ansible_host }}"
 logstash_port: "5044"
 logstash_ssl: false

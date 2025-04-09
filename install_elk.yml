@@ -4,12 +4,12 @@
   become: yes
 
   roles:
-    # - elasticsearch
-    # - kibana
+    - elasticsearch
+    - kibana
     - logstash
 
-# - name: Install filebeat
-#   hosts: patroni
-#   become: yes
-#   roles:
-#     - filebeat
+- name: Install filebeat
+  hosts: patroni
+  become: yes
+  roles:
+    - filebeat

@@ -1,8 +1,8 @@
 output {
   elasticsearch {
-    hosts => ["https://localhost:9200"]
-    ssl => true
-    ssl_certificate_verification => false
+    hosts => ["http://localhost:9200"]
+    # ssl => true
+    # ssl_certificate_verification => false
     manage_template => false
     index => "postgresql-%{+YYYY.MM.dd}"
     user => {{ elasticsearch_user }}

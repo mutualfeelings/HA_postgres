@@ -10,4 +10,4 @@ filebeat.inputs:
     multiline.match: after
 
 output.logstash:
-  hosts: ["{{  }}:{{ logstash_port }}"]
+  hosts: ["{{ logstash_host }}:{{ logstash_port }}"]
