@@ -1,3 +1,32 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for logstash
+# - name: Download and install the Debian package manually
+#   ansible.builtin.get_url:
+#     url: "{{ logstash_deb_url }}"
+#     dest: "/tmp/logstash-{{ logstash_version }}.deb"
+#     mode: "0644"
+
+- name: Install logstash package
+  ansible.builtin.apt:
+    deb: "/tmp/logstash-{{ logstash_version }}-amd64.deb"
+    state: present
+
+- name: Configure logstash files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: logstash
+    group: logstash
+    mode: '0644'
+  loop:
+    - { src: 'input.conf.j2', dest: '/etc/logstash/conf.d/input.conf' }
+    - { src: 'output.conf.j2', dest: '/etc/logstash/conf.d/output.conf' }
+    - { src: 'filter.conf.j2', dest: '/etc/logstash/conf.d/filter.conf' }
+  notify: Restart logstash
+
+- name: Enable and start logstash service
+  ansible.builtin.systemd:
+    name: logstash
+    enabled: yes
+    state: started

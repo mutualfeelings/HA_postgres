@@ -1,3 +1,9 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for logstash
+logstash_version: 8.17.4
+logstash_deb_url: "https://artifacts.elastic.co/downloads/logstash/logstash-{{ logstash_version }}-amd64.deb"
+logstash_server_host: "0.0.0.0"
+
+elasticsearch_user: elastic
+elasticsearch_password: "324012"

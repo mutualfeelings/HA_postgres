@@ -4,8 +4,8 @@
   become: yes
 
   roles:
-    - elasticsearch
-    - kibana
+    # - elasticsearch
+    # - kibana
     - logstash
 
 # - name: Install filebeat

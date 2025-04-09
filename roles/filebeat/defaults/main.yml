@@ -1,3 +1,7 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for filebeat
+logstash_host: "{{ hostvars['elk'].ansible_host }}"
+logstash_port: "5044"
+logstash_ssl: false
+logstash_ssl_cert: "{{ logstash_ssl_cert }}"
